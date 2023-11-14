@@ -54,26 +54,19 @@
                 <div class="text-danger"> {{$message}} </div>
                 @enderror
             </div>
-            <!-- /.col -->
+
 
 
             <div class="mb-5">
-                <label for="technologies" class="form-label">Technologies</label>
-
-                <select multiple class="form-select @error('technologies') is-invalid @enderror" name="technologies[]" id="technologies">
-                    <option disabled>Select a technology</option>
-                    <option value="">No one</option>
-                    @forelse($technologies as $technology)
-                    <option value=" {{$technology->id}} " {{in_array($technology->id, old('technologies', [])) ? 'selected' : ''}}>{{$technology->name}}</option>
-                    @empty
-
-                    @endforelse
-                </select>
-                @error('technology')
-                <div class="text-danger"> {{$message}} </div>
-                @enderror
+                <label for="technologies" class="form-label d-block">Choose Technologies:</label>
+                @foreach ($technologies as $technology)
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input @error('technologies') is-invalid @enderror" type="checkbox" id="technologies" name="technologies[]" value="{{ $technology->id }}" {{ in_array($technology->id, old('technologies', [])) ? 'checked' : '' }}>
+                    <label class="form-check-label" for="technologies">{{ $technology->name }}</label>
+                </div>
+                @endforeach
             </div>
-            <!-- /.col -->
+
 
             <div class="mb-5">
                 <label for="description" class="form-label">Description</label>

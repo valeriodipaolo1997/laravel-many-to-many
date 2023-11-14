@@ -135,14 +135,18 @@ class ProjectController extends Controller
         $relative_path = Str::after($thumb, 'storage/');
 
 
-         
-         if (!is_null($project->thumb)) {
-           //dd($project->thumb);
+
+        if (!is_null($project->thumb)) {
+            //dd($project->thumb);
             //dd(Storage::exists($relative_path));
             Storage::delete($relative_path);
         }
 
-        $project->technologies()->detach();
+        if ($project->technologies) {
+            $project->technologies()->detach();
+        }
+
+
         $project->forceDelete();
 
         return to_route('admin.trash')->with('message', 'Well Done! Project deleted successfully!');

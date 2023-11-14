@@ -65,34 +65,34 @@
                 <div class="text-danger"> {{$message}} </div>
                 @enderror
             </div>
-            <!-- /.col -->
+
 
             <div class="mb-5">
-                <label for="technologies" class="form-label">Technologies</label>
+                <label for="technologies" class="form-label d-block">Choose Technologies:</label>
 
-                <select multiple class="form-select @error('technologies') is-invalid @enderror" name="technologies[]" id="technologies">
-                    <option disabled>Select a technology</option>
-                    <option value="">No one</option>
+                @foreach ($technologies as $technology)
 
-                    @foreach($technologies as $technology)
+                @if ($errors->any())
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="technologies" name="technologies[]" value="{{ $technology->id }}" {{ in_array($technology->id, old('technologies', [])) ? 'checked' : '' }}>
+                    <label class="form-check-label" for="technologies">{{ $technology->name }}</label>
+                </div>
 
-                    @if ($errors->any())
+                @else
 
-                    <option value=" {{$technology->id}} " {{in_array($technology->id, old('technologies', [])) ? 'selected' : ''}}>{{$technology->name}}</option>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="technologies" name="technologies[]" value="{{ $technology->id }}" {{ $project->technologies->contains($technology) ? 'checked' : '' }}>
+                    <label class="form-check-label" for="technologies">{{ $technology->name }}</label>
 
-                    @else
+                </div>
 
-                    <option value=" {{$technology->id}} " {{ $project->technologies->contains($technology) ? 'selected' : ''}}>{{$technology->name}}</option>
+                @endif
+                @endforeach
 
-                    @endif
-                    @endforeach
-
-                </select>
                 @error('technology')
                 <div class="text-danger"> {{$message}} </div>
                 @enderror
             </div>
-            <!-- /.col -->
 
 
             <div class="mb-5">
