@@ -16,7 +16,7 @@
         @endif
 
         <div class="pb-4">
-        <h2 class="text-muted text-uppercase">Edit project ID: {{$project->id}}</h2>
+            <h2 class="text-muted text-uppercase">Edit project ID: {{$project->id}}</h2>
         </div>
 
         <form action=" {{route('admin.projects.update', $project)}}" method="POST" enctype="multipart/form-data">
@@ -50,27 +50,54 @@
             </div>
 
             <div class="mb-5">
-                    <label for="type_id" class="form-label">Types</label>
+                <label for="type_id" class="form-label">Types</label>
 
-                    <select class="form-select @error('type_id') is-invalid @enderror" name="type_id" id="type_id">
-                        <option selected disabled>Select a Type</option>
-                        <option value="">Untyped</option>
-                        @forelse($types as $type)
-                            <option value=" {{$type->id}} " {{$type->id == old('type_id', $project->type_id) ? 'selected' : ''}} >{{$type->name}}</option>
-                        @empty
+                <select class="form-select @error('type_id') is-invalid @enderror" name="type_id" id="type_id">
+                    <option selected disabled>Select a Type</option>
+                    <option value="">Untyped</option>
+                    @forelse($types as $type)
+                    <option value=" {{$type->id}} " {{$type->id == old('type_id', $project->type_id) ? 'selected' : ''}}>{{$type->name}}</option>
+                    @empty
 
-                        @endforelse
-                    </select>
-                    @error('type_id')
-                    <div class="text-danger"> {{$message}} </div>
-                    @enderror
-                </div>
-                <!-- /.col -->
+                    @endforelse
+                </select>
+                @error('type_id')
+                <div class="text-danger"> {{$message}} </div>
+                @enderror
+            </div>
+            <!-- /.col -->
+
+            <div class="mb-5">
+                <label for="technologies" class="form-label">Technologies</label>
+
+                <select multiple class="form-select @error('technologies') is-invalid @enderror" name="technologies[]" id="technologies">
+                    <option disabled>Select a technology</option>
+                    <option value="">No one</option>
+
+                    @foreach($technologies as $technology)
+
+                    @if ($errors->any())
+
+                    <option value=" {{$technology->id}} " {{in_array($technology->id, old('technologies', [])) ? 'selected' : ''}}>{{$technology->name}}</option>
+
+                    @else
+
+                    <option value=" {{$technology->id}} " {{ $project->technologies->contains($technology) ? 'selected' : ''}}>{{$technology->name}}</option>
+
+                    @endif
+                    @endforeach
+
+                </select>
+                @error('technology')
+                <div class="text-danger"> {{$message}} </div>
+                @enderror
+            </div>
+            <!-- /.col -->
 
 
             <div class="mb-5">
                 <label for="description" class="form-label">Description</label>
-                <textarea class="form-control @error('description') is-invalid @enderror" name="description" id="description" cols="30" rows="5" placeholder="Type a description" required>{{old('title', $project->description)}}</textarea>
+                <textarea class="form-control @error('description') is-invalid @enderror" name="description" id="description" cols="30" rows="5" placeholder="Type a description" required>{{old('description', $project->description)}}</textarea>
                 @error('description')
                 <div class="text-danger"> {{$message}} </div>
                 @enderror
@@ -78,7 +105,7 @@
 
             <div class="mb-5">
                 <label for="content" class="form-label">Content</label>
-                <textarea class="form-control @error('content') is-invalid @enderror" name="content" id="content" cols="30" rows="5" placeholder="Type a content" required>{{old('title', $project->content)}}</textarea>
+                <textarea class="form-control @error('content') is-invalid @enderror" name="content" id="content" cols="30" rows="5" placeholder="Type a content" required>{{old('content', $project->content)}}</textarea>
                 @error('content')
                 <div class="text-danger"> {{$message}} </div>
                 @enderror

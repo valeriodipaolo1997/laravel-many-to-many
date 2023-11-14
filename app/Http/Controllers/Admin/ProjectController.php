@@ -66,8 +66,9 @@ class ProjectController extends Controller
     public function edit(Project $project)
     {
         $types = Type::all();
+        $technologies = Technology::all();
 
-        return view('admin.projects.edit', compact('project', 'types'));
+        return view('admin.projects.edit', compact('project', 'types', 'technologies'));
     }
     /**
      * Update the specified resource in storage.
@@ -90,6 +91,10 @@ class ProjectController extends Controller
         }
 
         $project->update($val_data);
+
+        if ($request->has('technologies')) {
+            $project->technologies()->sync($val_data['technologies']);
+        }
 
         return to_route('admin.projects.index')->with('message', 'Welldone! project updated successfully');
     }
@@ -137,6 +142,7 @@ class ProjectController extends Controller
             Storage::delete($relative_path);
         }
 
+        $project->technologies()->detach();
         $project->forceDelete();
 
         return to_route('admin.trash')->with('message', 'Well Done! Project deleted successfully!');
