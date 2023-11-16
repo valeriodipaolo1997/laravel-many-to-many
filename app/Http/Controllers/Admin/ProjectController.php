@@ -90,6 +90,11 @@ class ProjectController extends Controller
             $val_data['thumb'] = $file_path;
         }
 
+         if (!Str::is($project->getOriginal('title'), $request->title)) {
+            $val_data['slug'] = $project->generateSlug($request->title);
+        }
+
+
         $project->update($val_data);
 
         if ($request->has('technologies')) {
